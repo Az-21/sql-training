@@ -11,6 +11,13 @@ winget install astral-sh.uv
 ```
 
 2. Run `uv sync` to create the project environment and install DuckDB
+
+```powershell
+git clone https://github.com/Az-21/sql-training
+cd sql-training
+uv sync
+```
+
 3. Create your own working folder by copying `submissions/sample-user/` to `submissions/your-name/`
 4. For example, if your name is Alex, copy it to `submissions/alex/`
 5. Change into your copied folder and run the example script:
