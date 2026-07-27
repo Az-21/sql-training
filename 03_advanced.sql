@@ -83,3 +83,71 @@
 --   - Average hours logged per employee on projects
 
 
+
+-- Exercise 13
+-- Using NTILE, divide all employees into 4 salary quartiles.
+-- Show name, salary, and which quartile (1=lowest, 4=highest) they fall in.
+
+
+
+-- Exercise 14
+-- For each employee, calculate how many days they have been with the company
+-- as of today. Show name, hire_date, and days_employed.
+
+
+
+-- Exercise 15
+-- Using a CTE, find all employees who earn more than the average salary
+-- of ALL employees (not just their department).
+-- Then show what percentage of the total salary bill they represent.
+
+
+
+-- Exercise 16
+-- Show the first sale and the last sale (by date) made by each sales employee.
+-- Show: name, first_sale_date, first_sale_amount, last_sale_date, last_sale_amount.
+-- Use window functions (FIRST_VALUE / LAST_VALUE or ROW_NUMBER).
+
+
+
+-- Exercise 17
+-- Find pairs of employees who are in the same department AND
+-- were hired within 6 months of each other.
+-- Show both employee names, department, and their hire dates.
+
+
+
+-- Exercise 18
+-- Calculate a 3-month rolling average of total sales per month for 2023.
+-- Show: month, monthly_total, rolling_avg_3_months.
+
+
+
+-- Exercise 19
+-- Using a CTE, identify employees who have been on projects
+-- that have gone over their original planned end_date (end_date < today but status = 'active').
+-- Show employee name, project name, and planned end_date.
+
+
+
+-- Exercise 20
+-- For each employee, show their salary percentile rank within the company
+-- (i.e. what percentage of employees earn less than them).
+-- Show name, salary, and percentile_rank rounded to 2 decimal places.
+-- Hint: use PERCENT_RANK().
+
+
+
+-- Exercise 21 (Challenge)
+-- Build a full employee summary report. For each employee show:
+--   - Full name
+--   - Department name
+--   - Manager name (or 'No Manager')
+--   - Salary band (Junior / Mid / Senior)
+--   - Salary rank within their department
+--   - Number of projects they are on
+--   - Total hours logged across all projects
+--   - Total sales amount (0 if not in sales)
+-- Order by department name, then salary rank.
+
+

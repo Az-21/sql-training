@@ -70,3 +70,65 @@
 -- Show project name and total hours.
 
 
+
+-- Exercise 13
+-- Show each employee's full name, their department name, and their manager's full name.
+-- If no manager, show 'No Manager'.
+
+
+
+-- Exercise 14
+-- Find the total sales per product.
+-- Show product name and total amount, sorted by total amount descending.
+
+
+
+-- Exercise 15
+-- Find all employees who share the same job title.
+-- Show the job title and the names of employees who have it.
+-- Exclude job titles held by only one person.
+
+
+
+-- Exercise 16
+-- For each department, show the number of employees hired after 2020.
+
+
+
+-- Exercise 17
+-- Find the employee who has logged the most total hours across all projects.
+-- Show their name and total hours.
+
+
+
+-- Exercise 18
+-- Show each region's total sales and the number of sales transactions.
+
+
+
+-- Exercise 19
+-- Find all employees who are both a manager (someone reports to them)
+-- and are assigned to at least one project.
+-- Show their name, department, and number of direct reports.
+
+
+
+-- Exercise 20
+-- List each project with its total budget vs total hours logged.
+-- Show: project name, budget, total_hours, and cost_per_hour
+-- (assume cost_per_hour = budget / total_hours, rounded to 2 decimal places).
+
+
+
+-- Exercise 21
+-- Find the top-selling product in each region.
+-- Show: region, product, and total sales amount.
+
+
+
+-- Exercise 22
+-- Show all employees who joined in the same year as at least one other employee
+-- from a different department.
+-- Show their name, department name, and hire year.
+
+

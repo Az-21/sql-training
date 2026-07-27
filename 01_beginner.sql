@@ -56,3 +56,59 @@
 -- Count how many employees are in the company total.
 
 
+
+-- Exercise 11
+-- Get all employees hired in the year 2020.
+-- Show their full name and hire_date.
+
+
+
+-- Exercise 12
+-- Get all sales made in the 'East' region.
+-- Show the sale amount, product, and sale_date.
+
+
+
+-- Exercise 13
+-- Show all employees whose salary is NOT between 70,000 and 90,000.
+
+
+
+-- Exercise 14
+-- Get all projects that have an end_date (i.e. end_date is not NULL).
+-- Show project name and end_date, sorted by end_date ascending.
+
+
+
+-- Exercise 15
+-- Find all employees whose first name contains the letter 'a' (case-insensitive).
+
+
+
+-- Exercise 16
+-- Show the total salary paid across the entire company.
+
+
+
+-- Exercise 17
+-- Get all employees sorted by department_id ascending,
+-- then by salary descending within each department.
+
+
+
+-- Exercise 18
+-- Find all sales for the product 'Enterprise'.
+-- Show employee_id, amount, and sale_date.
+
+
+
+-- Exercise 19
+-- Show the minimum, maximum, and average salary in the company.
+-- Label the columns as min_salary, max_salary, avg_salary.
+
+
+
+-- Exercise 20
+-- Get all departments located in 'New York'.
+
+
