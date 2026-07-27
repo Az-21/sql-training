@@ -24,8 +24,8 @@ uv sync
 
 ```powershell
 # cd into root of repo
-Copy-Item -Recurse .\submissions\sample-user .\submissions\alex
-cd .\submissions\alex
+Copy-Item -Recurse ./submissions/sample-user ./submissions\alex
+cd ./submissions/alex
 uv run 01_beginner.py
 ```
 
