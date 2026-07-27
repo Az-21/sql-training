@@ -149,5 +149,3 @@
 --   - Total hours logged across all projects
 --   - Total sales amount (0 if not in sales)
 -- Order by department name, then salary rank.
-
-

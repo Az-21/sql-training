@@ -110,5 +110,3 @@
 
 -- Exercise 20
 -- Get all departments located in 'New York'.
-
-

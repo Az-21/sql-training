@@ -130,5 +130,3 @@
 -- Show all employees who joined in the same year as at least one other employee
 -- from a different department.
 -- Show their name, department name, and hire year.
-
-
