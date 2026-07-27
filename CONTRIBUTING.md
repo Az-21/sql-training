@@ -1,14 +1,6 @@
 # How to Submit Your Answers
 
-## Step 1 — Fork the Repo
-
-1. Go to the repo on GitHub
-2. Click **Fork** (top right)
-3. This creates your own copy of the repo
-
----
-
-## Step 2 — Set Up the Database
+## Set Up the Database
 
 This repo uses DuckDB through the local `uv` Python environment. You do not need PostgreSQL, MySQL, SQL Server, or a browser-based SQL sandbox.
 
@@ -38,15 +30,15 @@ con.sql("SHOW TABLES").show()
 
 ---
 
-## Step 3 — Solve the Exercises
+## Solve the Exercises
 
 Work through the files in order:
 
-| File | Level |
-|------|-------|
-| `01_beginner.sql` | Beginner |
+| File                  | Level        |
+| --------------------- | ------------ |
+| `01_beginner.sql`     | Beginner     |
 | `02_intermediate.sql` | Intermediate |
-| `03_advanced.sql` | Advanced |
+| `03_advanced.sql`     | Advanced     |
 
 Write your query below each exercise comment and run it from the same DuckDB connection to see the results.
 
@@ -62,7 +54,7 @@ LIMIT 5;
 
 ---
 
-## Step 4 — Submit Your Answers
+## Submit Your Answers
 
 1. In your fork, create a folder: `submissions/your-name/`
 2. For each exercise file, save your queries as a `.sql` file in that folder
