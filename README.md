@@ -4,9 +4,36 @@ A hands-on SQL exercise set covering beginner to advanced topics, built around a
 
 ## How to Use
 
-1. Run `00_setup.sql` first to create all tables and load sample data
-2. Work through the exercise files in order
-3. Write your answers directly below each exercise comment
+1. Install [`uv`](https://docs.astral.sh/uv/) if you do not already have it
+
+```powershell
+winget install -e --id astral-sh.uv
+```
+
+2. Run `uv sync` to create the project environment and install DuckDB
+3. Start Python with `uv run python`
+4. Create the local DuckDB database and load the sample data:
+
+```python
+from pathlib import Path
+import duckdb
+
+con = duckdb.connect("training.duckdb")
+con.execute(Path("00_setup.sql").read_text())
+```
+
+5. Work through the exercise files in order
+6. Write your answers directly below each exercise comment
+7. Run individual queries from the same Python session, for example:
+
+```python
+con.sql("""
+SELECT first_name, last_name, job_title
+FROM employees;
+""").show()
+```
+
+If you want a fresh database each time, delete `training.duckdb` and rerun the setup snippet.
 
 ## Files
 
@@ -42,7 +69,7 @@ hours_logged                    sale_date
                                 region
 ```
 
-## Compatible With
+## Runtime
 
-Works with any standard SQL database: **PostgreSQL**, **MySQL**, **SQLite**, **SQL Server**.  
-Minor syntax differences may apply for date functions and window functions on older versions.
+This repo now targets **DuckDB** through the project's `uv`-managed Python environment.
+No separate SQL server is required, and the setup instructions in this repo assume DuckDB semantics.
