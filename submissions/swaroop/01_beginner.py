@@ -8,16 +8,16 @@ con.execute(Path("../../00_setup.sql").read_text())
 sql_text = Path("sql/01_solution.sql").read_text()
 
 for query in sql_text.split(";"):
-    query = query.strip()
+  query = query.strip()
 
-    if not query:
-        continue
+  if not query:
+    continue
 
-    if "select" not in query.lower():
-        continue
+  if "select" not in query.lower():
+    continue
 
-    print("\n-- Running query --")
-    print(query)
-    print()
+  print("\n-- Running query --")
+  print(query)
+  print()
 
-    con.sql(query).show()
+  con.sql(query).show()

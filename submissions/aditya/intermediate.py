@@ -15,15 +15,15 @@ sql_text = SQL_FILE.read_text()
 queries = [q.strip() for q in sql_text.split(";") if q.strip()]
 
 for i, query in enumerate(queries, start=1):
-    print("\n" + "=" * 60)
-    print(f"que{i}")
-    print("=" * 60)
+  print("\n" + "=" * 60)
+  print(f"que{i}")
+  print("=" * 60)
 
-    # print the SQL source for this question
-    print("\nSolution:\n")
-    print(query.strip() + ";")
+  # print the SQL source for this question
+  print("\nSolution:\n")
+  print(query.strip() + ";")
 
-    # execute and show results
-    print("\nOutput:\n")
-    con.sql(query).show()
-    print("\n" + "-" * 60)
+  # execute and show results
+  print("\nOutput:\n")
+  con.sql(query).show()
+  print("\n" + "-" * 60)
