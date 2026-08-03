@@ -1,43 +1,45 @@
 -- Exercise 1
 -- Show each employee's full name along with their department name.
-select 
+select
     e.first_name,
     e.last_name,
     d.name
-from employees e
-join departments d
-on e.id = d.id;
+from employees as e
+inner join departments as d
+    on e.id = d.id;
 
 -- Exercise 2
 -- Show each employee's full name and their manager's full name.
 -- If an employee has no manager, still show their name (with NULL for manager).
-select 
+select
     e.first_name,
     e.last_name,
     e2.first_name,
-    e2.last_name,
-from employees e
-left join employees e2
-on e2.id = e.manager_id;
+    e2.last_name
+from employees as e
+left join employees as e2
+    on e.manager_id = e2.id;
 
 -- Exercise 4
 -- Find the average salary per department.
 -- Only show departments where the average salary is above 80,000.
 
-select 
-    d.id, d.name, avg(e. salary)
-from employees e 
-join departments d 
-on e.department_id  = d.id 
+select
+    d.id,
+    d.name,
+    avg(e.salary)
+from employees as e
+inner join departments as d
+    on e.department_id = d.id
 group by d.id, d.name
-having avg(e. salary)>80000;
+having avg(e.salary) > 80000;
 
 -- Exercise 5
 -- Find the highest and lowest salary in the company per job title.
 select
+    job_title,
     max(salary),
-    min(salary),
-    job_title
+    min(salary)
 from employees
 group by job_title;
 
@@ -48,13 +50,13 @@ group by job_title;
 -- Include projects that have no employees assigned.
 -- ============================================================
 
-SELECT
-    p.name AS project_name,
-    COUNT(ep.employee_id) AS employee_count
-FROM projects p
-LEFT JOIN employee_projects ep
-    ON p.id = ep.project_id
-GROUP BY p.id, p.name;
+select
+    p.name as project_name,
+    count(ep.employee_id) as employee_count
+from projects as p
+left join employee_projects as ep
+    on p.id = ep.project_id
+group by p.id, p.name;
 
 -- ============================================================
 -- Exercise 7
@@ -62,15 +64,15 @@ GROUP BY p.id, p.name;
 -- Show their name and the number of projects.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
-    COUNT(ep.project_id) AS project_count
-FROM employees e
-JOIN employee_projects ep
-    ON e.id = ep.employee_id
-GROUP BY e.id, e.first_name, e.last_name
-HAVING COUNT(ep.project_id) > 1;
+    count(ep.project_id) as project_count
+from employees as e
+inner join employee_projects as ep
+    on e.id = ep.employee_id
+group by e.id, e.first_name, e.last_name
+having count(ep.project_id) > 1;
 
 -- ============================================================
 -- Exercise 8
@@ -78,15 +80,15 @@ HAVING COUNT(ep.project_id) > 1;
 -- Show their full name and total sales, sorted by total sales descending.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
-    SUM(s.amount) AS total_sales
-FROM employees e
-JOIN sales s
-    ON e.id = s.employee_id
-GROUP BY e.id, e.first_name, e.last_name
-ORDER BY total_sales DESC;
+    sum(s.amount) as total_sales
+from employees as e
+inner join sales as s
+    on e.id = s.employee_id
+group by e.id, e.first_name, e.last_name
+order by total_sales desc;
 
 -- ============================================================
 -- Exercise 9
@@ -95,20 +97,21 @@ ORDER BY total_sales DESC;
 -- Show their name, salary, and department name.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
     e.salary,
-    d.name AS department_name
-FROM employees e
-JOIN departments d
-    ON e.department_id = d.id
-WHERE e.salary >
-(
-    SELECT AVG(e2.salary)
-    FROM employees e2
-    WHERE e2.department_id = e.department_id
-);
+    d.name as department_name
+from employees as e
+inner join departments as d
+    on e.department_id = d.id
+where
+    e.salary
+    > (
+        select avg(e2.salary)
+        from employees as e2
+        where e2.department_id = e.department_id
+    );
 
 
 -- ============================================================
@@ -116,33 +119,34 @@ WHERE e.salary >
 -- List all employees who have NOT been assigned to any project.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name
-FROM employees e
-LEFT JOIN employee_projects ep
-    ON e.id = ep.employee_id
-WHERE ep.employee_id IS NULL;
+from employees as e
+left join employee_projects as ep
+    on e.id = ep.employee_id
+where ep.employee_id is NULL;
 
 -- ============================================================
 -- Exercise 11
 -- For each department, show the name of the highest-paid employee.
 -- ============================================================
 
-SELECT
-    d.name AS department_name,
+select
+    d.name as department_name,
     e.first_name,
     e.last_name,
     e.salary
-FROM employees e
-JOIN departments d
-    ON e.department_id = d.id
-WHERE e.salary =
-(
-    SELECT MAX(e2.salary)
-    FROM employees e2
-    WHERE e2.department_id = e.department_id
-);
+from employees as e
+inner join departments as d
+    on e.department_id = d.id
+where
+    e.salary
+    = (
+        select max(e2.salary)
+        from employees as e2
+        where e2.department_id = e.department_id
+    );
 
 -- ============================================================
 -- Exercise 12
@@ -150,14 +154,14 @@ WHERE e.salary =
 -- Show project name and total hours.
 -- ============================================================
 
-SELECT
-    p.name AS project_name,
-    SUM(ep.hours_logged) AS total_hours
-FROM projects p
-JOIN employee_projects ep
-    ON p.id = ep.project_id
-GROUP BY p.id, p.name
-HAVING SUM(ep.hours_logged) > 400;
+select
+    p.name as project_name,
+    sum(ep.hours_logged) as total_hours
+from projects as p
+inner join employee_projects as ep
+    on p.id = ep.project_id
+group by p.id, p.name
+having sum(ep.hours_logged) > 400;
 
 -- ============================================================
 -- Exercise 13
@@ -166,19 +170,19 @@ HAVING SUM(ep.hours_logged) > 400;
 -- If no manager, show 'No Manager'.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
-    d.name AS department_name,
-    COALESCE(
+    d.name as department_name,
+    coalesce(
         m.first_name || ' ' || m.last_name,
         'No Manager'
-    ) AS manager_name
-FROM employees e
-JOIN departments d
-    ON e.department_id = d.id
-LEFT JOIN employees m
-    ON e.manager_id = m.id;
+    ) as manager_name
+from employees as e
+inner join departments as d
+    on e.department_id = d.id
+left join employees as m
+    on e.manager_id = m.id;
 
 -- ============================================================
 -- Exercise 14
@@ -187,12 +191,12 @@ LEFT JOIN employees m
 -- sorted by total amount descending.
 -- ============================================================
 
-SELECT
+select
     product,
-    SUM(amount) AS total_sales
-FROM sales
-GROUP BY product
-ORDER BY total_sales DESC;
+    sum(amount) as total_sales
+from sales
+group by product
+order by total_sales desc;
 
 -- ============================================================
 -- Exercise 15
@@ -201,33 +205,34 @@ ORDER BY total_sales DESC;
 -- Exclude job titles held by only one person.
 -- ============================================================
 
-SELECT
+select
     job_title,
     first_name,
     last_name
-FROM employees
-WHERE job_title IN
-(
-    SELECT job_title
-    FROM employees
-    GROUP BY job_title
-    HAVING COUNT(*) > 1
-)
-ORDER BY job_title;
+from employees
+where
+    job_title in
+    (
+        select job_title
+        from employees
+        group by job_title
+        having count(*) > 1
+    )
+order by job_title;
 
 -- ============================================================
 -- Exercise 16
 -- For each department, show the number of employees hired after 2020.
 -- ============================================================
 
-SELECT
-    d.name AS department_name,
-    COUNT(e.id) AS employee_count
-FROM departments d
-JOIN employees e
-    ON d.id = e.department_id
-WHERE e.hire_date > '2020-12-31'
-GROUP BY d.name;
+select
+    d.name as department_name,
+    count(e.id) as employee_count
+from departments as d
+inner join employees as e
+    on d.id = e.department_id
+where e.hire_date > '2020-12-31'
+group by d.name;
 
 -- ============================================================
 -- Exercise 17
@@ -236,28 +241,28 @@ GROUP BY d.name;
 -- Show their name and total hours.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
-    SUM(ep.hours_logged) AS total_hours
-FROM employees e
-JOIN employee_projects ep
-    ON e.id = ep.employee_id
-GROUP BY e.id, e.first_name, e.last_name
-ORDER BY total_hours DESC
-LIMIT 1;
+    sum(ep.hours_logged) as total_hours
+from employees as e
+inner join employee_projects as ep
+    on e.id = ep.employee_id
+group by e.id, e.first_name, e.last_name
+order by total_hours desc
+limit 1;
 
 -- ============================================================
 -- Exercise 18
 -- Show each region's total sales and the number of sales transactions.
 -- ============================================================
 
-SELECT
+select
     region,
-    SUM(amount) AS total_sales,
-    COUNT(*) AS transaction_count
-FROM sales
-GROUP BY region;
+    sum(amount) as total_sales,
+    count(*) as transaction_count
+from sales
+group by region;
 
 -- ============================================================
 -- Exercise 19
@@ -266,19 +271,19 @@ GROUP BY region;
 -- Show their name, department, and number of direct reports.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
-    d.name AS department_name,
-    COUNT(r.id) AS direct_reports
-FROM employees e
-JOIN departments d
-    ON e.department_id = d.id
-JOIN employees r
-    ON e.id = r.manager_id
-JOIN employee_projects ep
-    ON e.id = ep.employee_id
-GROUP BY e.id, e.first_name, e.last_name, d.name;
+    d.name as department_name,
+    count(r.id) as direct_reports
+from employees as e
+inner join departments as d
+    on e.department_id = d.id
+inner join employees as r
+    on e.id = r.manager_id
+inner join employee_projects as ep
+    on e.id = ep.employee_id
+group by e.id, e.first_name, e.last_name, d.name;
 
 -- ============================================================
 -- Exercise 20
@@ -286,18 +291,18 @@ GROUP BY e.id, e.first_name, e.last_name, d.name;
 -- Show: project name, budget, total_hours, and cost_per_hour.
 -- ============================================================
 
-SELECT
-    p.name AS project_name,
+select
+    p.name as project_name,
     p.budget,
-    SUM(ep.hours_logged) AS total_hours,
-    ROUND(
-        p.budget / SUM(ep.hours_logged),
+    sum(ep.hours_logged) as total_hours,
+    round(
+        p.budget / sum(ep.hours_logged),
         2
-    ) AS cost_per_hour
-FROM projects p
-JOIN employee_projects ep
-    ON p.id = ep.project_id
-GROUP BY p.id, p.name, p.budget;
+    ) as cost_per_hour
+from projects as p
+inner join employee_projects as ep
+    on p.id = ep.project_id
+group by p.id, p.name, p.budget;
 
 -- ============================================================
 -- Exercise 21
@@ -305,22 +310,24 @@ GROUP BY p.id, p.name, p.budget;
 -- Show: region, product, and total sales amount.
 -- ============================================================
 
-WITH product_sales AS (
-    SELECT
+with product_sales as (
+    select
         region,
         product,
-        SUM(amount) AS total_sales
-    FROM sales
-    GROUP BY region, product
+        sum(amount) as total_sales
+    from sales
+    group by region, product
 )
-SELECT *
-FROM product_sales ps
-WHERE total_sales =
-(
-    SELECT MAX(ps2.total_sales)
-    FROM product_sales ps2
-    WHERE ps2.region = ps.region
-);
+
+select *
+from product_sales as ps
+where
+    total_sales
+    = (
+        select max(ps2.total_sales)
+        from product_sales as ps2
+        where ps2.region = ps.region
+    );
 
 -- ============================================================
 -- Exercise 22
@@ -329,20 +336,22 @@ WHERE total_sales =
 -- Show their name, department name, and hire year.
 -- ============================================================
 
-SELECT
+select
     e.first_name,
     e.last_name,
-    d.name AS department_name,
-    EXTRACT(YEAR FROM e.hire_date) AS hire_year
-FROM employees e
-JOIN departments d
-    ON e.department_id = d.id
-WHERE EXISTS
-(
-    SELECT 1
-    FROM employees e2
-    WHERE EXTRACT(YEAR FROM e2.hire_date) =
-          EXTRACT(YEAR FROM e.hire_date)
-      AND e2.department_id <> e.department_id
-      AND e2.id <> e.id
-);
+    d.name as department_name,
+    extract(year from e.hire_date) as hire_year
+from employees as e
+inner join departments as d
+    on e.department_id = d.id
+where
+    exists
+    (
+        select 1
+        from employees as e2
+        where
+            extract(year from e2.hire_date)
+            = extract(year from e.hire_date)
+            and e2.department_id <> e.department_id
+            and e2.id <> e.id
+    );

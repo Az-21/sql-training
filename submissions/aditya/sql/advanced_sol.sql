@@ -10,8 +10,8 @@ SELECT
         PARTITION BY e.department_id
         ORDER BY e.salary DESC
     ) AS salary_rank
-FROM employees e
-JOIN departments d
+FROM employees AS e
+INNER JOIN departments AS d
     ON e.department_id = d.id;
 
 
@@ -27,18 +27,17 @@ SELECT
     AVG(e.salary) OVER (
         PARTITION BY e.department_id
     ) AS dept_avg,
-    e.salary -
-    AVG(e.salary) OVER (
+    e.salary
+    - AVG(e.salary) OVER (
         PARTITION BY e.department_id
     ) AS diff_from_avg
-FROM employees e;
+FROM employees AS e;
 
 
 -- Exercise 3
 -- Using a CTE, find the top 2 highest-paid employees in each department.
 
-WITH ranked_employees AS
-(
+WITH ranked_employees AS (
     SELECT
         e.first_name,
         e.last_name,
@@ -48,10 +47,11 @@ WITH ranked_employees AS
             PARTITION BY e.department_id
             ORDER BY e.salary DESC
         ) AS rn
-    FROM employees e
-    JOIN departments d
+    FROM employees AS e
+    INNER JOIN departments AS d
         ON e.department_id = d.id
 )
+
 SELECT *
 FROM ranked_employees
 WHERE rn <= 2;
@@ -120,14 +120,14 @@ GROUP BY band;
 -- Hint: use LAG and date functions.
 
 
-WITH monthly_sales AS
-(
+WITH monthly_sales AS (
     SELECT
         DATE_TRUNC('month', sale_date) AS month,
         SUM(amount) AS total_sales
     FROM sales
     GROUP BY DATE_TRUNC('month', sale_date)
 )
+
 SELECT
     month,
     total_sales,
@@ -136,8 +136,8 @@ SELECT
     ) AS previous_month_sales,
     ROUND(
         (
-            total_sales -
-            LAG(total_sales) OVER (ORDER BY month)
+            total_sales
+            - LAG(total_sales) OVER (ORDER BY month)
         )
         * 100.0
         /
@@ -151,8 +151,7 @@ FROM monthly_sales;
 -- Using a recursive CTE, show the full management chain for employee id = 3.
 -- Output should show each level: employee name -> their manager -> their manager's manager, etc.
 
-WITH RECURSIVE management_chain AS
-(
+WITH RECURSIVE management_chain AS (
     SELECT
         id,
         first_name,
@@ -170,10 +169,11 @@ WITH RECURSIVE management_chain AS
         e.last_name,
         e.manager_id,
         mc.level + 1
-    FROM employees e
-    JOIN management_chain mc
+    FROM employees AS e
+    INNER JOIN management_chain AS mc
         ON e.id = mc.manager_id
 )
+
 SELECT *
 FROM management_chain;
 
@@ -186,8 +186,8 @@ SELECT
     name AS project_name,
     budget,
     ROUND(
-        budget * 100.0 /
-        SUM(budget) OVER (),
+        budget * 100.0
+        / SUM(budget) OVER (),
         2
     ) AS budget_percentage
 FROM projects;
@@ -204,27 +204,27 @@ SELECT
     hire_date,
     salary
 FROM employees
-WHERE hire_date <= CURRENT_DATE - INTERVAL '5 years'
-AND salary <
-(
-    SELECT AVG(salary)
-    FROM employees
-);
+WHERE
+    hire_date <= CURRENT_DATE - INTERVAL '5 years'
+    AND salary
+    < (
+        SELECT AVG(salary)
+        FROM employees
+    );
 
 
 -- Exercise 11
 -- Show each sales rep's sales performance compared to the best performer in their region.
 -- Show: name, region, their total sales, the region's top sales, and the gap.
 
-WITH rep_sales AS
-(
+WITH rep_sales AS (
     SELECT
         e.first_name,
         e.last_name,
         s.region,
         SUM(s.amount) AS total_sales
-    FROM employees e
-    JOIN sales s
+    FROM employees AS e
+    INNER JOIN sales AS s
         ON e.id = s.employee_id
     GROUP BY
         e.id,
@@ -232,6 +232,7 @@ WITH rep_sales AS
         e.last_name,
         s.region
 )
+
 SELECT
     first_name,
     last_name,
@@ -260,10 +261,10 @@ SELECT
     SUM(e.salary) AS total_salary_budget,
     COUNT(DISTINCT ep.project_id) AS active_projects,
     AVG(ep.hours_logged) AS avg_hours_logged
-FROM departments d
-JOIN employees e
+FROM departments AS d
+INNER JOIN employees AS e
     ON d.id = e.department_id
-LEFT JOIN employee_projects ep
+LEFT JOIN employee_projects AS ep
     ON e.id = ep.employee_id
 GROUP BY d.id, d.name;
 
@@ -299,24 +300,24 @@ FROM employees;
 -- of ALL employees (not just their department).
 -- Then show what percentage of the total salary bill they represent.
 
-WITH above_avg AS
-(
-    SELECT
-        *
+WITH above_avg AS (
+    SELECT *
     FROM employees
-    WHERE salary >
-    (
-        SELECT AVG(salary)
-        FROM employees
-    )
+    WHERE
+        salary
+        > (
+            SELECT AVG(salary)
+            FROM employees
+        )
 )
+
 SELECT
     first_name,
     last_name,
     salary,
     ROUND(
-        salary * 100.0 /
-        (
+        salary * 100.0
+        / (
             SELECT SUM(salary)
             FROM employees
         ),
@@ -330,18 +331,17 @@ FROM above_avg;
 -- Show: name, first_sale_date, first_sale_amount, last_sale_date, last_sale_amount.
 -- Use window functions (FIRST_VALUE / LAST_VALUE or ROW_NUMBER).
 
-WITH sales_ranked AS
-(
+WITH sales_ranked AS (
     SELECT
         employee_id,
         sale_date,
         amount,
-        ROW_NUMBER() OVER(
+        ROW_NUMBER() OVER (
             PARTITION BY employee_id
             ORDER BY sale_date
         ) AS first_sale,
 
-        ROW_NUMBER() OVER(
+        ROW_NUMBER() OVER (
             PARTITION BY employee_id
             ORDER BY sale_date DESC
         ) AS last_sale
@@ -365,11 +365,12 @@ SELECT
     d.name AS department_name,
     e1.hire_date,
     e2.hire_date
-FROM employees e1
-JOIN employees e2
-    ON e1.department_id = e2.department_id
-   AND e1.id < e2.id
-JOIN departments d
+FROM employees AS e1
+INNER JOIN employees AS e2
+    ON
+        e1.department_id = e2.department_id
+        AND e1.id < e2.id
+INNER JOIN departments AS d
     ON e1.department_id = d.id
 WHERE ABS(
     DATE_DIFF('day', e1.hire_date, e2.hire_date)
@@ -380,14 +381,14 @@ WHERE ABS(
 -- Calculate a 3-month rolling average of total sales per month for 2023.
 -- Show: month, monthly_total, rolling_avg_3_months.
 
-WITH monthly_sales AS
-(
+WITH monthly_sales AS (
     SELECT
         DATE_TRUNC('month', sale_date) AS month,
         SUM(amount) AS monthly_total
     FROM sales
     GROUP BY DATE_TRUNC('month', sale_date)
 )
+
 SELECT
     month,
     monthly_total,
@@ -404,23 +405,24 @@ FROM monthly_sales;
 -- that have gone over their original planned end_date (end_date < today but status = 'active').
 -- Show employee name, project name, and planned end_date.
 
-WITH overdue_projects AS
-(
+WITH overdue_projects AS (
     SELECT *
     FROM projects
-    WHERE end_date < CURRENT_DATE
-    AND status = 'active'
+    WHERE
+        end_date < CURRENT_DATE
+        AND status = 'active'
 )
+
 SELECT
     e.first_name,
     e.last_name,
     p.name AS project_name,
     p.end_date
-FROM employees e
-JOIN employee_projects ep
+FROM employees AS e
+INNER JOIN employee_projects AS ep
     ON e.id = ep.employee_id
-JOIN overdue_projects p
-    ON p.id = ep.project_id;
+INNER JOIN overdue_projects AS p
+    ON ep.project_id = p.id;
 
 
 -- Exercise 20
@@ -455,8 +457,8 @@ FROM employees;
 -- Order by department name, then salary rank.
 
 SELECT
-    e.first_name || ' ' || e.last_name AS employee_name,
     d.name AS department_name,
+    e.first_name || ' ' || e.last_name AS employee_name,
     COALESCE(
         m.first_name || ' ' || m.last_name,
         'No Manager'
@@ -485,17 +487,17 @@ SELECT
         0
     ) AS total_sales
 
-FROM employees e
-JOIN departments d
+FROM employees AS e
+INNER JOIN departments AS d
     ON e.department_id = d.id
 
-LEFT JOIN employees m
+LEFT JOIN employees AS m
     ON e.manager_id = m.id
 
-LEFT JOIN employee_projects ep
+LEFT JOIN employee_projects AS ep
     ON e.id = ep.employee_id
 
-LEFT JOIN sales s
+LEFT JOIN sales AS s
     ON e.id = s.employee_id
 
 GROUP BY
